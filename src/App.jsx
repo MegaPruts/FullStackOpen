@@ -1,17 +1,22 @@
-const Header = (title) => {
+const Header = (titleObject) => {
     return (
-        <h1>{title.title}</h1>
+        <h1>{titleObject.title}</h1>
     )
 }
-const Parts = (exercises) => {
+const Parts = (exercisesObject) => {
     return (
-        <>
-            {exercises.exercises.map((e) => <p>{e.part} {e.numberOfExercises}</p>)}
-        </>
+        <>{exercisesObject.exercises.map((e) => <Part key={e.part} part={e}/>)}</>
     )
+
 }
-const NumberOfExercises = (exercises) => {
-    const total = exercises.exercises.map((e) => e.numberOfExercises).reduce((a, b) => a + b)
+const Part = (partsObject) => {
+    return (
+        <p>{partsObject.part.part} {partsObject.part.numberOfExercises}</p>
+    )
+
+}
+const NumberOfExercises = (exercisesObject) => {
+    const total = exercisesObject.exercises.map((e) => e.numberOfExercises).reduce((a, b) => a + b)
     return (
         <p>Number of exercises {total}</p>
     )
@@ -24,9 +29,9 @@ const App = () => {
         {part: 'State of a component', numberOfExercises: 14}]
     return (
         <div>
-            <Header title={course.title}/>
-            <Parts exercises={exercises}/>
-            <NumberOfExercises exercises={exercises}/>
+            <Header key='1' title={course.title}/>
+            <Parts key='2' exercises={exercises}/>
+            <NumberOfExercises key='3' exercises={exercises}/>
         </div>
     )
 }
