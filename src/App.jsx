@@ -1,39 +1,29 @@
 const Header = (titleObject) => {
-    return (
-        <h1>{titleObject.title}</h1>
-    )
+    return (<h1>{titleObject.title}</h1>)
 }
-const Parts = (exercisesObject) => {
-    return (
-        <>{exercisesObject.exercises.map((e) => <Part key={e.part} part={e}/>)}</>
-    )
+const Parts = (partsObject) => {
+    return (<>{partsObject.parts.map(p => <Part key={p.name} part={p}/>)}</>)
 
 }
 const Part = (partsObject) => {
-    return (
-        <p>{partsObject.part.part} {partsObject.part.numberOfExercises}</p>
-    )
+    return (<p>{partsObject.part.name} {partsObject.part.numberOfExercises}</p>)
 
 }
-const NumberOfExercises = (exercisesObject) => {
-    const total = exercisesObject.exercises.map((e) => e.numberOfExercises).reduce((a, b) => a + b)
-    return (
-        <p>Number of exercises {total}</p>
-    )
+const NumberOfExercises = (partsObject) => {
+    return (<p>Number of exercises {partsObject.parts.map(p => p.numberOfExercises).reduce((a, b) => a + b)}</p>)
 }
 const App = () => {
     const course = {title: 'Half Stack application development'}
-    const exercises = [
-        {part: 'Fundamentals of React', numberOfExercises: 10},
-        {part: 'Using props to pass data', numberOfExercises: 7},
-        {part: 'State of a component', numberOfExercises: 14}]
-    return (
-        <div>
-            <Header key='1' title={course.title}/>
-            <Parts key='2' exercises={exercises}/>
-            <NumberOfExercises key='3' exercises={exercises}/>
-        </div>
-    )
+    const parts = [
+        {name: 'Fundamentals of React', numberOfExercises: 10},
+        {name: 'Using props to pass data', numberOfExercises: 7},
+        {name: 'State of a component', numberOfExercises: 14}
+    ]
+    return (<div>
+            <Header title={course.title}/>
+            <Parts parts={parts}/>
+            <NumberOfExercises parts={parts}/>
+        </div>)
 }
 
 export default App
