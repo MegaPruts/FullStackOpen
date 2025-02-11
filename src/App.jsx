@@ -1,31 +1,44 @@
-const Header = (titleObject) => {
-    return (<h1>{titleObject.title}</h1>)
-}
-const Parts = (partsObject) => {
-    return (<>{partsObject.parts.map(p => <Part key={p.name} part={p}/>)}</>)
+import {useState} from 'react'
 
+const Title = (props) => {
+    return <h1>{props.title}</h1>
 }
-const Part = (partsObject) => {
-    return (<p>{partsObject.part.name} {partsObject.part.numberOfExercises}</p>)
 
+const Button = (props) => {
+    return <button onClick={props.button.onClick}>{props.button.text}</button>
 }
-const NumberOfExercises = (partsObject) => {
-    return (<p>Number of exercises {partsObject.parts.map(p => p.numberOfExercises).reduce((a, b) => a + b)}</p>)
+const FeedbackButtons = (props) => {
+    return (<>{
+        props.buttons.map(
+            b => <Button button={b}/>
+        )
+    }</>)
 }
+
+const Scores = (props) => {
+     return (<div>
+        <p>Good: {props.scores[0]}</p>
+        <p>Neutral: {props.scores[1]}</p>
+        <p>Bad: {props.scores[2]}</p>
+    </div>)
+}
+
 const App = () => {
-    const course = {
-        title: 'Half Stack application development',
-        parts: [
-            {name: 'Fundamentals of React', numberOfExercises: 10},
-            {name: 'Using props to pass data', numberOfExercises: 7},
-            {name: 'State of a component', numberOfExercises: 14}
-        ]
-    }
+    // save clicks of each button to its own state
+    const [good, setGood] = useState(0)
+    const [neutral, setNeutral] = useState(0)
+    const [bad, setBad] = useState(0)
+
+    const goodButton ={text: "good", onClick: () => setGood(good+1)}
+    const neutralButton ={text: "neutral", onClick: () => setNeutral(neutral+1)}
+    const badButton ={text: "bad", onClick: () => setBad(bad+1)}
+
 
     return (<div>
-        <Header title={course.title}/>
-        <Parts parts={course.parts}/>
-        <NumberOfExercises parts={course.parts}/>
+        <Title title="Give feedback"/>
+        <FeedbackButtons buttons={[goodButton,neutralButton,badButton]}/>
+        <Title title="Statistics"/>
+        <Scores scores={[good, neutral, bad]}/>
     </div>)
 }
 
