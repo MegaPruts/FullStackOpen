@@ -18,6 +18,10 @@ const FeedbackView = (props) => {
     }</>)
 }
 
+const StatisticLine=(props)=>{
+    return (<p key={props.text}>{props.text} {props.value}</p>)
+}
+
 const Total = (scores) => scores.reduce((a, b) => a + b)
 const Average = (scores) => (scores[0] - scores[1]) / scores.length
 const Positive = (scores) => Total(scores) === 0 ? 0 : scores[0] / Total(scores) * 100
@@ -29,15 +33,15 @@ const StatisticsView = (props) => {
             <Title title="Statistics"/>
             {
                 (Total(scores) === 0)
-                    ? <p key="nofeedback">No feedback given</p>
+                    ?   <StatisticLine text="No feedback given"/>
                     : <>
-                        <p key="good">Good: {scores[0]}</p>
-                        <p key="neutral">Neutral: {scores[1]}</p>
-                        <p key="bad">Bad: {scores[2]}</p>
-                        <p key="all">all: {Total(scores)}</p>
-                        <p key="average">average: {Average([scores[0], scores[2]])}</p>
-                        <p key="positive">positive: {Positive(scores)} %</p>
-                    </>
+                        <StatisticLine text="Good:" value={scores[0]}/>
+                        <StatisticLine text="Neutral:" value={scores[1]}/>
+                        <StatisticLine text="Bad:" value={scores[2]}/>
+                        <StatisticLine text="All:" value={Total(scores)}/>
+                        <StatisticLine text="Average:" value={Average([scores[0], scores[2]])}/>
+                        <StatisticLine text="Positive:" value={Positive(scores)+" %"}/>
+                     </>
             }
         </div>
     )
