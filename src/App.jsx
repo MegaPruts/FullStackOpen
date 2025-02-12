@@ -12,14 +12,17 @@ const FeedbackView = (props) => {
     return (<>
         <Title title="Give feedback"/>
         {
-        props.buttons.map(
-            b => <Button button={b}/>
-        )
-    }</>)
+            props.buttons.map(
+                b => <Button button={b}/>
+            )
+        }</>)
 }
 
-const StatisticLine=(props)=>{
-    return (<p key={props.text}>{props.text} {props.value}</p>)
+const StatisticLine = (props) => {
+    return (<tr>
+        <td>{props.text}</td>
+        <td>{props.value}</td>
+    </tr>)
 }
 
 const Total = (scores) => scores.reduce((a, b) => a + b)
@@ -31,18 +34,22 @@ const StatisticsView = (props) => {
     return (
         <div>
             <Title title="Statistics"/>
-            {
-                (Total(scores) === 0)
-                    ?   <StatisticLine text="No feedback given"/>
-                    : <>
-                        <StatisticLine text="Good:" value={scores[0]}/>
-                        <StatisticLine text="Neutral:" value={scores[1]}/>
-                        <StatisticLine text="Bad:" value={scores[2]}/>
-                        <StatisticLine text="All:" value={Total(scores)}/>
-                        <StatisticLine text="Average:" value={Average([scores[0], scores[2]])}/>
-                        <StatisticLine text="Positive:" value={Positive(scores)+" %"}/>
-                     </>
-            }
+            <table>
+                <tbody>
+                {
+                    (Total(scores) === 0)
+                        ? <StatisticLine text="No feedback given"/>
+                        : <>
+                            <StatisticLine text="Good:" value={scores[0]}/>
+                            <StatisticLine text="Neutral:" value={scores[1]}/>
+                            <StatisticLine text="Bad:" value={scores[2]}/>
+                            <StatisticLine text="All:" value={Total(scores)}/>
+                            <StatisticLine text="Average:" value={Average([scores[0], scores[2]])}/>
+                            <StatisticLine text="Positive:" value={Positive(scores) + " %"}/>
+                        </>
+                }
+                </tbody>
+            </table>
         </div>
     )
 }
