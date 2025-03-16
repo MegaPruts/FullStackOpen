@@ -3,7 +3,7 @@ const Header = (title) => {
         <h1>{title.title}</h1>
     )
 }
-const Parts = (exercises) => {
+const Contents = (exercises) => {
     return (
         <>
             {exercises.exercises.map((e) => <p>{e.part} {e.numberOfExercises}</p>)}
@@ -25,7 +25,7 @@ const App = () => {
     return (
         <div>
             <Header title={course.title}/>
-            <Parts exercises={exercises}/>
+            <Contents exercises={exercises}/>
             <NumberOfExercises exercises={exercises}/>
         </div>
     )
