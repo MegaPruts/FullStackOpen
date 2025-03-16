@@ -1,74 +1,53 @@
 import {useState} from 'react'
 
-const Title = (props) => {
-    return <h1>{props.title}</h1>
-}
-
 const Button = (props) => {
     return <button onClick={props.button.onClick}>{props.button.text}</button>
 }
 
-const FeedbackView = (props) => {
-    return (<>
-        <Title title="Give feedback"/>
-        {
-            props.buttons.map(
-                b => <Button button={b}/>
-            )
-        }</>)
-}
-
-const StatisticLine = (props) => {
-    return (<tr>
-        <td>{props.text}</td>
-        <td>{props.value}</td>
-    </tr>)
-}
-
-const Total = (scores) => scores.reduce((a, b) => a + b)
-const Average = (scores) => (scores[0] - scores[1]) / scores.length
-const Positive = (scores) => Total(scores) === 0 ? 0 : scores[0] / Total(scores) * 100
-
-const StatisticsView = (props) => {
-    const scores = props.scores
-    return (
-        <div>
-            <Title title="Statistics"/>
-            <table>
-                <tbody>
-                {
-                    (Total(scores) === 0)
-                        ? <StatisticLine text="No feedback given"/>
-                        : <>
-                            <StatisticLine text="Good:" value={scores[0]}/>
-                            <StatisticLine text="Neutral:" value={scores[1]}/>
-                            <StatisticLine text="Bad:" value={scores[2]}/>
-                            <StatisticLine text="All:" value={Total(scores)}/>
-                            <StatisticLine text="Average:" value={Average([scores[0], scores[2]])}/>
-                            <StatisticLine text="Positive:" value={Positive(scores) + " %"}/>
-                        </>
-                }
-                </tbody>
-            </table>
-        </div>
-    )
-}
 
 const App = () => {
-    // save clicks of each button to its own state
-    const [good, setGood] = useState(0)
-    const [neutral, setNeutral] = useState(0)
-    const [bad, setBad] = useState(0)
+    const [selected, setSelected] = useState(0)
 
-    const goodButton = {text: "good", onClick: () => setGood(good + 1)}
-    const neutralButton = {text: "neutral", onClick: () => setNeutral(neutral + 1)}
-    const badButton = {text: "bad", onClick: () => setBad(bad + 1)}
+    const anecdotes = [
+        'If it hurts, do it more often.',
+        'Adding manpower to a late software project makes it later!',
+        'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+        'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+        'Premature optimization is the root of all evil.',
+        'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+        'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+        'The only way to go fast, is to go well.'
+    ]
+    const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+    const [maxVotes, setMaxVotes] = useState(0)
 
+    const selectAnecdoteButton = {
+        text: "select anecdote",
+        onClick: () => setSelected(Math.floor(Math.random() * anecdotes.length))
+    }
 
-    return (<div>
-        <FeedbackView buttons={[goodButton, neutralButton, badButton]}/>
-        <StatisticsView scores={[good, neutral, bad]}/>
-    < /div>)
+    const voteButton = {
+        text: "vote",
+        onClick: () => {
+            let newVotes = [...votes];
+            newVotes[selected] += 1
+            if (newVotes[selected] > maxVotes) setMaxVotes(newVotes[selected])
+            setVotes(newVotes)
+        }
+    }
+
+    return (
+        <div>
+            <h1>Anecdote of the day</h1>
+            <p>{anecdotes[selected]}</p>
+            {votes[selected] > 0 && <p>has {votes[selected]} votes</p>}
+            <Button button={selectAnecdoteButton}/>
+            <Button button={voteButton}/>
+            {maxVotes > 0 && <h1>Anecdote with most votes</h1>}
+            {maxVotes > 0 && <p>{anecdotes[votes.findIndex(v => v === maxVotes)]}</p>}
+
+        </div>
+    )
 }
 
 export default App
